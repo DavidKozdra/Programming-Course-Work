@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Slot Machine</title>
+
+    <script>
+        /*
+        David Kozdra
+        1/19/2022
+        CAP4730.01I&T
+
+        Slot Machine
+        Dr. Bradford A. Towle Jr.
+        Graphics
+
+        */
+
+        class slotMachnine{
+            constructor(){
+                this.lastAmount =0;
+                this.slot = [0,0,0];
+                this.images = [];
+                this.images[0] = new Image();
+                this.images[1] = new Image();
+                this.images[2] = new Image();
+
+                this.space = document.createElement("br");
+
+                // add images to doc
+                document.getElementById("slots").appendChild(this.images[0]);
+                document.getElementById("slots").appendChild(this.images[1]);
+                document.getElementById("slots").appendChild(this.images[2]);
+                document.getElementById("slots").appendChild(this.space); // to create space between slots
+
+            }
+
+            //set the images based on the number
+            setImages(num){
+                if( num==0){
+                    return "Star.png";     
+                }
+                if (num == 1){
+                    return "Carrot.png";
+                }
+                if (num == 2){
+                    return "Orange.png";
+                }
+                if (num == 3){
+                    return "Flowers.png";
+                }
+                if (num == 4){
+                    return "Foo.png";
+                }
+                if (num == 5){
+                    return "Heart.png";
+                }
+                if (num == 6){
+                    return "Cherry.png";
+                }       
+            }
+
+
+            play(){
+                //console.log("play");
+                this.slot[0] = Math.floor(Math.random()*7);
+                this.slot[1] = Math.floor(Math.random()*7);
+                this.slot[2] = Math.floor(Math.random()*7);
+            
+                
+                //set the images
+                this.images[0].src = this.setImages(this.slot[0]);
+                this.images[1].src = this.setImages(this.slot[1]);
+                this.images[2].src = this.setImages(this.slot[2]);
+
+
+                if(this.slot[0] == 0 && this.slot[1] ==0 && this.slot[2] == 0){ // 0 0 0
+                    this.lastAmount = 14;
+                }else if(this.slot[0] == 0 && this.slot[1] ==0 && this.slot[2] != 0){ // 0 0 -
+                    this.lastAmount = 3;
+                }else if(this.slot[0] == this.slot[1] && this.slot[1] == this.slot[2] && this.slot[0] != 0){ // x x x
+                    this.lastAmount = 7;
+                }else if(this.slot[0] == this.slot[1] && this.slot[1] != this.slot[2]){ // x x - 
+                    this.lastAmount = 2;
+                }else if(this.slot[0] == 0){   // 0 - - 
+                    this.lastAmount = 1;
+                }else{ // - - -
+                    this.lastAmount = 0;
+                }
+    
+            }
+        }
+
+        class main{
+
+            constructor(){
+               this.money =100;
+               this.instances = [];
+
+               // output vs display display is made here output is a div in the html
+               var node = document.createElement("section");   
+               node.id = "display";
+               document.getElementById("output").appendChild(node);
+                
+                // create the slot machine
+               this.instances.push(new slotMachnine());
+               
+               this.instances.push(new slotMachnine());
+               
+               this.instances.push(new slotMachnine());
+            }
+
+           playAll(){
+                if(this.money > 0){ // as long as the player hasn't lost a ton
+                    this.money -= 1;    
+                    var sum = 0;
+                    for(var i = 0; i < this.instances.length; i++){
+                        this.instances[i].play();
+                        console.log( "\n" + this.instances[i].slot[0] + " | " + this.instances[i].slot[1] + " | " + this.instances[i].slot[2]);
+                    }
+                    for(var i = 0; i < this.instances.length; i++){
+                        sum+= this.instances[i].lastAmount;
+                    }
+                    if(sum > 0){
+                        this.money += sum;
+                        document.getElementById("output").innerHTML = " \n WINNER  $" + sum + "!   Money: $" + this.money + "<br>";
+                    }else{
+                        document.getElementById("output").innerHTML = "\n Game Over  Money: $"  + this.money + "<br>";
+                    }
+                }else{
+                    document.getElementById("output").innerHTML = "\n Game Over  Money: $"  + this.money + "<br>";
+                }
+           }
+
+           Handle_Click(){
+                this.playAll();
+           }
+        }
+
+        function onClick(){
+            myMain.Handle_Click();
+        }     
+
+
+
+    </script>
+</head>
+<body>
+    <div id="slots">
+        
+    </div>
+
+   <div id ="output">
+
+
+   </div>
+    <button onclick="onClick()"> Play </button>
+
+    <script>
+        var myMain = new main();
+    </script>
+</body>
+</html>

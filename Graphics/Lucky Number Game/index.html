@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lucky Number</title>
+
+    <script>
+        /*
+        David Kozdra
+        1/16/2022
+        CAP4730.01I&T
+
+        Lucky Number
+        Dr. Bradford A. Towle Jr.
+        Graphics
+
+        */
+
+        class main{
+
+            constructor(){
+                this.plays = 0;
+                this.wins = 0;
+
+                //get the html elements for the class
+                this.display = document.getElementById("display");
+                this.img = document.getElementById("image");
+            }
+
+            playGame(){
+                //set new random numbers from 1 -100 
+                var one =  (Math.floor(Math.random() * 100) + 1);
+                var two =  (Math.floor(Math.random() * 100) + 1);
+
+                this.plays++; // increment plays
+                if(one > two){ // check who wins 
+                    this.wins++;
+                }
+                // display results
+                this.display.innerHTML = "Wins: " + this.wins + " Losses: " + (this.plays - this.wins) + "</br>" +" Random 1: "+one + " Random 2: " + two;
+                
+            }   
+            
+            
+            Handle_Click(){
+                this.playGame();
+
+                //set the image based on who is winning
+                // note losses is just total plays - wins
+                if(this.wins>this.plays-this.wins){
+                    this.img.src = "imgs/happy.png";
+                }else if(this.wins == this.plays-this.wins){
+                    this.img.src = "imgs/equals.png";
+                }
+                else{
+                    this.img.src = "imgs/sad.png";
+                }
+            }
+        }
+
+        function onClick(){
+            myMain.Handle_Click();
+        }
+
+    </script>
+</head>
+<body>
+    <img id= "image" width="500" height="500" src="imgs/equals.png"> </img>
+
+    
+    <div id="display">  press play to start</div>
+    <button style="width: 300px; height: 100px; font-size: larger;" onclick="onClick()"> PLAY </button>
+
+    <script>
+        var myMain = new main();
+    </script>
+</body>
+</html>
